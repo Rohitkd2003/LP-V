@@ -1,0 +1,105 @@
+2a.
+
+#include <iostream>
+#include <omp.h>
+using namespace std;
+
+void bubble(int arr[], int n) {
+    for (int i = 0; i < n - 1; i++)
+        for (int j = 0; j < n - i - 1; j++)
+            if (arr[j] > arr[j + 1]) swap(arr[j], arr[j + 1]);
+}
+
+void pBubble(int arr[], int n) {
+    for (int i = 0; i < n; i++) {
+        #pragma omp parallel for
+        for (int j = 1; j < n; j += 2)
+            if (arr[j] < arr[j - 1]) swap(arr[j], arr[j - 1]);
+        #pragma omp barrier
+        #pragma omp parallel for
+        for (int j = 2; j < n; j += 2)
+            if (arr[j] < arr[j - 1]) swap(arr[j], arr[j - 1]);
+    }
+}
+
+int main() {
+    int n = 10, arr[n];
+    for (int i = 0, j = n; i < n; i++, j--) arr[i] = j;
+
+    double start = omp_get_wtime();
+    bubble(arr, n);
+    cout << "Sequential time: " << omp_get_wtime() - start << " sec\n";
+
+    for (int i = 0, j = n; i < n; i++, j--) arr[i] = j;
+    start = omp_get_wtime();
+    pBubble(arr, n);
+    cout << "Parallel time: " << omp_get_wtime() - start << " sec\n";
+
+    return 0;
+}
+
+
+Command to run : g++ -fopenmp -o main main.cpp
+./main
+
+
+
+
+2.b
+#include <iostream>
+#include <omp.h>
+using namespace std;
+
+void merge(int arr[], int low, int mid, int high) {
+    int n1 = mid - low + 1, n2 = high - mid;
+    int left[n1], right[n2];
+    for (int i = 0; i < n1; i++) left[i] = arr[low + i];
+    for (int j = 0; j < n2; j++) right[j] = arr[mid + 1 + j];
+    int i = 0, j = 0, k = low;
+    while (i < n1 && j < n2) arr[k++] = (left[i] <= right[j]) ? left[i++] : right[j++];
+    while (i < n1) arr[k++] = left[i++];
+    while (j < n2) arr[k++] = right[j++];
+}
+
+void mergeSort(int arr[], int low, int high) {
+    if (low < high) {
+        int mid = (low + high) / 2;
+        mergeSort(arr, low, mid);
+        mergeSort(arr, mid + 1, high);
+        merge(arr, low, mid, high);
+    }
+}
+
+void parallelMergeSort(int arr[], int low, int high) {
+    if (low < high) {
+        int mid = (low + high) / 2;
+        #pragma omp parallel sections
+        {
+            #pragma omp section
+            mergeSort(arr, low, mid);
+            #pragma omp section
+            mergeSort(arr, mid + 1, high);
+        }
+        merge(arr, low, mid, high);
+    }
+}
+int main() {
+    int n = 10, arr[n];
+    for (int i = 0, j = n; i < n; i++, j--) arr[i] = j;
+    
+    double start_time = omp_get_wtime();
+    mergeSort(arr, 0, n - 1);
+    cout << "Sequential time: " << omp_get_wtime() - start_time << "s\n";
+
+    for (int i = 0, j = n; i < n; i++, j--) arr[i] = j;
+    start_time = omp_get_wtime();
+    parallelMergeSort(arr, 0, n - 1);
+    cout << "Parallel time: " << omp_get_wtime() - start_time << "s\n";
+
+    return 0;
+}
+
+
+cd Desktop
+g++ -fopenmp pr1.cpp -o pr1
+./pr1

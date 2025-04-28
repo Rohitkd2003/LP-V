@@ -1,0 +1,56 @@
+#include <iostream>
+#include <vector>
+#include <omp.h>
+using namespace std;
+
+int parallelMin(const vector<int>& vec) {
+    int min_val = vec[0];
+    #pragma omp parallel for reduction(min:min_val)
+    for (int i = 1; i < vec.size(); i++) {
+        min_val = min(min_val, vec[i]);
+    }
+    return min_val;
+}
+int parallelMax(const vector<int>& vec) {
+    int max_val = vec[0];
+    #pragma omp parallel for reduction(max:max_val)
+    for (int i = 1; i < vec.size(); i++) {
+        max_val = max(max_val, vec[i]);
+    }
+    return max_val;
+}
+int parallelSum(const vector<int>& vec) {
+    int sum = 0;
+    #pragma omp parallel for reduction(+:sum)
+    for (int i = 0; i < vec.size(); i++) {
+        sum += vec[i];
+    }
+    return sum;
+}
+float parallelAverage(const vector<int>& vec) {
+    return float(parallelSum(vec)) / vec.size();
+}
+
+int main() {
+    int n;
+    cout << "Enter number of elements: ";
+    cin >> n;
+
+    vector<int> vec(n);
+    cout << "Enter elements: ";
+    for (int i = 0; i < n; ++i) {
+        cin >> vec[i];
+    }
+
+    cout << "Min: " << parallelMin(vec) << "\n";
+    cout << "Max: " << parallelMax(vec) << "\n";
+    cout << "Sum: " << parallelSum(vec) << "\n";
+    cout << "Avg: " << parallelAverage(vec) << "\n";
+
+    return 0;
+}
+
+
+cd Desktop
+g++ -fopenmp pr1.cpp -o pr1
+./pr1
