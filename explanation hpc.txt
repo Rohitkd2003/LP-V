@@ -1,0 +1,136 @@
+#include <iostream> – For input and output operations.
+
+#include <vector> – For using dynamic array (vector) in C++.
+
+#include <omp.h> – For using OpenMP (parallel programming).
+
+#include <queue> – For using the queue data structure.
+
+class Graph – Define a Graph class.
+
+Graph(int V):V(V),adj(V) {} – Constructor to initialize the graph with V vertices.
+
+addEdge(v, w) – Add an edge from vertex v to w.
+
+parallelDFS(v, vis) – Perform parallel Depth First Search starting from node v.
+
+parallelBFS(s) – Perform parallel Breadth First Search starting from node s.
+
+#pragma omp parallel for – Make for loop run in parallel across threads.
+
+#pragma omp critical – Protect critical sections (queue operations) from race conditions.
+
+main() – Main function: creates graph, adds edges, and calls DFS and BFS.
+
+Terminal Commands:
+
+cd Desktop – Move to Desktop directory.
+
+g++ -fopenmp pr1.cpp -o pr1 – Compile pr1.cpp with OpenMP enabled and create executable pr1.
+
+./pr1 – Run the compiled executable.
+
+
+
+
+
+2a: Parallel Bubble Sort
+#include <iostream> – For input and output operations.
+
+#include <omp.h> – For parallel programming with OpenMP.
+
+bubble(int arr[], int n) – Sequential Bubble Sort algorithm.
+
+pBubble(int arr[], int n) – Parallel Bubble Sort using OpenMP.
+
+#pragma omp parallel for – Parallelizes the inner loop for odd and even passes.
+
+#pragma omp barrier – Synchronizes threads to ensure each pass completes before the next.
+
+main() – Initializes the array, runs both sequential and parallel sorting, and compares execution times.
+
+2b: Parallel Merge Sort
+#include <iostream> – For input and output operations.
+
+#include <omp.h> – For parallel programming with OpenMP.
+
+merge(int arr[], int low, int mid, int high) – Merges two sorted subarrays into one.
+
+mergeSort(int arr[], int low, int high) – Sequential Merge Sort algorithm.
+
+parallelMergeSort(int arr[], int low, int high) – Parallel Merge Sort using OpenMP.
+
+#pragma omp parallel sections – Divides the merge sort into parallel sections.
+
+#pragma omp section – Marks the sections to be executed in parallel.
+
+main() – Initializes the array, runs both sequential and parallel merge sort, and compares execution times.
+
+
+
+
+
+C++ Code: Parallel Operations on Vector
+#include <iostream> – For input and output operations.
+
+#include <vector> – For using the vector container.
+
+#include <omp.h> – For parallel programming with OpenMP.
+
+Functions:
+parallelMin(const vector<int>& vec) – Finds the minimum value in the vector using parallel reduction.
+
+#pragma omp parallel for reduction(min:min_val) – Parallelizes the loop and reduces the result to the minimum value.
+
+parallelMax(const vector<int>& vec) – Finds the maximum value in the vector using parallel reduction.
+
+#pragma omp parallel for reduction(max:max_val) – Parallelizes the loop and reduces the result to the maximum value.
+
+parallelSum(const vector<int>& vec) – Calculates the sum of elements in the vector using parallel reduction.
+
+#pragma omp parallel for reduction(+:sum) – Parallelizes the loop and reduces the result to the sum of the elements.
+
+parallelAverage(const vector<int>& vec) – Calculates the average of elements in the vector by dividing the sum by the size.
+
+Main Function:
+Prompts the user to enter the number of elements and their values.
+
+Calls the above functions to compute the min, max, sum, and average of the vector in parallel.
+
+Displays the results to the user.
+
+Terminal Commands:
+
+cd Desktop – Change to the Desktop directory.
+
+g++ -fopenmp pr1.cpp -o pr1 – Compile the C++ code with OpenMP support and generate the executable pr1.
+
+./pr1 – Run the compiled executable.
+
+
+
+
+
+
+
+!pip install cupy-cuda11x – Install CuPy library for GPU arrays.
+
+USE_GPU = False – Set a flag to decide between CPU (NumPy) or GPU (CuPy).
+
+import cupy as xp / import numpy as np – Import CuPy if GPU is enabled, else NumPy.
+
+input() – Take input from user.
+
+np.array([...]) – Create an array from list.
+
+print() – Display output.
+
+D @ E – Matrix multiplication (D x E).
+
+C++ and Terminal Commands:
+
+cd Desktop – Change directory to Desktop.
+
+g++ -fopenmp pr1.cpp -o pr1 – Compile C++ code pr1.cpp with OpenMP (parallel programming support) and create executable pr1.
+
+./pr1 – Run the compiled executable.
