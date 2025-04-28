@@ -1,0 +1,77 @@
+Imports:
+
+import numpy as np – Array operations.
+
+import os – Handle files and directories.
+
+import cv2 – Read and process images.
+
+import matplotlib.pyplot as plt – Plot graphs.
+
+from sklearn.model_selection import train_test_split – Split data into train/test sets.
+
+from tensorflow.keras.models import Sequential – Create CNN model sequentially.
+
+from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout – Add CNN layers.
+
+from tensorflow.keras.utils import to_categorical – Convert labels to one-hot encoding.
+
+Dataset Loading:
+
+os.listdir(path) – List all category folders (diseases).
+
+cv2.imread(img_path) – Read an image from disk.
+
+cv2.resize(img_array, (64, 64)) – Resize image to 64x64.
+
+np.array(data) – Convert list of images to array.
+
+data/255.0 – Normalize pixel values (0-1 range).
+
+Splitting and Encoding:
+
+train_test_split(data, labels, test_size=0.2, random_state=42) – Split into 80% train, 20% test.
+
+to_categorical(y_train, num_classes) – Convert train labels to one-hot vectors.
+
+to_categorical(y_test, num_classes) – Convert test labels to one-hot vectors.
+
+Model Building:
+
+Sequential() – Initialize sequential model.
+
+Conv2D(32, (3,3), activation='relu', input_shape=(64, 64, 3)) – Add convolution layer (feature extraction).
+
+MaxPooling2D(2,2) – Downsample feature maps.
+
+Conv2D(64, (3,3), activation='relu') – Second convolution layer.
+
+MaxPooling2D(2,2) – Second pooling layer.
+
+Flatten() – Flatten 2D feature maps to 1D vector.
+
+Dense(128, activation='relu') – Fully connected layer (hidden layer).
+
+Dropout(0.5) – Drop 50% neurons to avoid overfitting.
+
+Dense(num_classes, activation='softmax') – Output layer for classification.
+
+Model Compilation:
+
+model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy']) – Compile model with optimizer, loss, and metrics.
+
+Model Training:
+
+model.fit(X_train, y_train, epochs=10, batch_size=32, validation_split=0.2) – Train model with validation split.
+
+Model Evaluation:
+
+model.evaluate(X_test, y_test) – Test model on unseen data.
+
+Plotting:
+
+plt.plot(history.history['accuracy']) – Plot training accuracy.
+
+plt.plot(history.history['val_accuracy']) – Plot validation accuracy.
+
+plt.title(), plt.xlabel(), plt.ylabel(), plt.legend(), plt.grid(), plt.show() – Set graph title, labels, legend, grid, and display the plot.
